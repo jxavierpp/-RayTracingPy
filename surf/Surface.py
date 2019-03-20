@@ -6,7 +6,7 @@ class Surface:
     reflectionCoefficient = 0
     transparencyCoefficient  = 0
 
-    def __init__(self, ambientColor, diffuseColor, specularColor, specularCoefficient, transparencyCoefficient, reflectionCoefficient):
+    def __init__(self, ambientColor, diffuseColor, specularColor, specularCoefficient, reflectionCoefficient, transparencyCoefficient):
         self.ambientColor = ambientColor
         self.diffuseColor = diffuseColor
         self.specularColor = specularColor

@@ -21,9 +21,9 @@ class Sphere(Primitive):
 
     def intersect(self, pos: T3D, ray):
         # translate ray origin to object's space
-        xadj = pos.x - self.center[0]
-        yadj = pos.y - self.center[1]
-        zadj = pos.z - self.center[2]
+        xadj = pos.x - self.center.x
+        yadj = pos.y - self.center.y
+        zadj = pos.z - self.center.z
 
         # solve quadratic equation
         b = xadj * ray.x + yadj * ray.y + zadj * ray.z
@@ -44,9 +44,9 @@ class Sphere(Primitive):
 
     def normal(self, pos: T3D):
         nrm = T3D()
-        nrm.x = (pos.x - self.center[0]) / self.radius
-        nrm.y = (pos.y - self.center[1]) / self.radius
-        nrm.z = (pos.z - self.center[2]) / self.radius
+        nrm.x = (pos.x - self.center.x) / self.radius
+        nrm.y = (pos.y - self.center.y) / self.radius
+        nrm.z = (pos.z - self.center.z) / self.radius
         return nrm
     
     def toString(self):

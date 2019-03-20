@@ -18,7 +18,6 @@ class RayTracerPy(object):
     image = 0
     lightDist = 0
     npImage = 0
-    LUT=np.zeros(256,dtype=np.uint8)
 
     def __init__(self):
         pass
@@ -34,7 +33,7 @@ class RayTracerPy(object):
         self.sizeY = 512
         self.image = Image.new('RGB', (self.sizeX, self.sizeY), color = 'red')
         self.npImage = np.array(self.image)
-        self.scene = Scene()
+        self.scene = Scene(3)
 
     def raytracer(self):
         screenX = T3D(0,0,0)
@@ -145,7 +144,29 @@ class RayTracerPy(object):
                     red += np.multiply(surface.specularColor[0], spec)
                     green += np.multiply(surface.specularColor[1], spec)
                     blue += np.multiply(surface.specularColor[2], spec)
-                
+        
+        newColor = (0,0,0)
+        # reflection
+        k = surface.reflectionCoefficient
+        if (k > 0 and self.level < self.scene.maxLevel):
+            self.level += 1
+            newColor = self.intersect(objectType.getId(), position, reflectedRay)
+            red += newColor[0] * k
+            green += newColor[1] * k
+            blue += newColor[2] * k
+            self.level-=1
+
+        # transparency
+        k = surface.transparencyCoefficient
+        if (k > 0):
+            red *= (1 - k)
+            green *= (1 - k)
+            blue *= (1 - k)
+            newColor = self.intersect(objectType.getId(), position, ray)
+            red += newColor[0] * k
+            green += newColor[1] * k
+            blue += newColor[2] * k
+
         red = self.clamp(red, 0, 255)
         green = self.clamp(green, 0, 255)
         blue = self.clamp(blue, 0, 255)
@@ -193,11 +214,8 @@ class RayTracerPy(object):
         return ival
 
     def writeImage(self):
-        # pixels = self.LUT[self.npImage]
-
-        # self.image.save('output.png')
         result = Image.fromarray(self.npImage)
-        result.save('output.png')
+        result.save(self.scene.filename)
        
 
         
