@@ -37,9 +37,9 @@ class RayTracerPy(object):
         self.scene = Scene()
 
     def raytracer(self):
-        screenX = T3D()
-        screenY = T3D()
-        firstRay = T3D()
+        screenX = T3D(0,0,0)
+        screenY = T3D(0,0,0)
+        firstRay = T3D(0,0,0)
         ray = T3D(0,0,0)
         self.viewing(screenX, screenY, firstRay)
 
@@ -50,7 +50,7 @@ class RayTracerPy(object):
                 ray.z = firstRay.z + pixelX * screenX.z - lineY * screenY.z
                 RayMath().normalize(ray)
                 color = self.intersect(-1, self.scene.camera.lookFrom, ray)
-                self.npImage[pixelX, lineY] = color
+                self.npImage[lineY, pixelX] = color
         
     def viewing(self, screenX, screenY, firstRay):
         gaze = T3D()
@@ -109,7 +109,6 @@ class RayTracerPy(object):
         normal = self.scene.getObject(objHit).normal(hit)
 
         r,g,b = self.shade(hit, ray, normal, self.scene.getObject(objHit))
-        # print(r,g,b)
 
         return r,g,b
     
